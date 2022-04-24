@@ -1,3 +1,4 @@
+# тест из задания №1 (1 урок)
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -6,63 +7,86 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import unittest, time, re
+from group import Group
 
 class UntitledTestCase1(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Firefox()
         self.driver.implicitly_wait(30)
-        self.base_url = "https://www.google.com/"
-        self.verificationErrors = []
-        self.accept_next_alert = True
     
-    def test_untitled_test_case1(self):
+    def test_add_group(self):
         driver = self.driver
-        driver.get("http://localhost/addressbook/index.php")
-        driver.find_element_by_name("user").click()
-        driver.find_element_by_name("user").clear()
-        driver.find_element_by_name("user").send_keys("admin")
-        driver.find_element_by_id("LoginForm").click()
-        driver.find_element_by_name("pass").click()
-        driver.find_element_by_name("pass").clear()
-        driver.find_element_by_name("pass").send_keys("secret")
-        driver.find_element_by_xpath("//input[@value='Login']").click()
-        driver.find_element_by_link_text("groups").click()
+        self.open_home_page(driver)
+        self.login("admin", driver)
+        self.open_groups_page(driver)
+        self.create_group(driver, Group(name="test", header="test", footer="test"))
+        self.return_to_groups_page(driver)
+        self.logout(driver)
+
+    def test_empty_group(self):
+        driver = self.driver
+        self.open_home_page(driver)
+        self.login("admin", driver)
+        self.open_groups_page(driver)
+        self.create_group(driver, Group(name="", header="", footer=""))
+        self.return_to_groups_page(driver)
+        self.logout(driver)
+
+    # def test_long_value_group(self):
+    #     driver = self.driver
+    #     self.open_home_page(driver)
+    #     self.login("admin", driver)
+    #     self.open_groups_page(driver)
+    #     self.create_group(driver, name="898989898898989898989898989898989898989898989909090909090909090909090909090909090909090909090909090909090909090909090909898", \
+    #                       header="9898989898989090909090990090909090909090909090089898989898989", footer="909090909090909090909090909090909090090909009090909000990909")
+    #
+    #     self.return_to_groups_page(driver)
+    #     self.logout(driver)
+
+    def create_group(self, driver, group):
+        # init group creation
         driver.find_element_by_name("new").click()
+        # fill group form
         driver.find_element_by_name("group_name").click()
         driver.find_element_by_name("group_name").clear()
-        driver.find_element_by_name("group_name").send_keys("test")
+        driver.find_element_by_name("group_name").send_keys(group.name)
         driver.find_element_by_name("group_header").click()
         driver.find_element_by_name("group_header").clear()
-        driver.find_element_by_name("group_header").send_keys("test")
+        driver.find_element_by_name("group_header").send_keys(group.header)
         driver.find_element_by_name("group_footer").click()
         driver.find_element_by_name("group_footer").click()
         driver.find_element_by_name("group_footer").clear()
-        driver.find_element_by_name("group_footer").send_keys("test")
+        driver.find_element_by_name("group_footer").send_keys(group.footer)
+
+        # submit group creation
         driver.find_element_by_name("submit").click()
-        driver.find_element_by_link_text("group page").click()
+
+    def logout(self, driver):
+        # logout
         driver.find_element_by_link_text("Logout").click()
-    
-    def is_element_present(self, how, what):
-        try: self.driver.find_element(by=how, value=what)
-        except NoSuchElementException as e: return False
-        return True
-    
-    def is_alert_present(self):
-        try: self.driver.switch_to_alert()
-        except NoAlertPresentException as e: return False
-        return True
-    
-    def close_alert_and_get_its_text(self):
-        try:
-            alert = self.driver.switch_to_alert()
-            alert_text = alert.text
-            if self.accept_next_alert:
-                alert.accept()
-            else:
-                alert.dismiss()
-            return alert_text
-        finally: self.accept_next_alert = True
+
+    def return_to_groups_page(self, driver):
+        # return to groups page
+        driver.find_element_by_link_text("group page").click()
+
+    def open_groups_page(self, driver):
+        # open groups page
+        driver.find_element_by_link_text("groups").click()
+
+    def login(self, username, driver, password="secret"):
+        driver.find_element_by_name("user").click()
+        driver.find_element_by_name("user").clear()
+        driver.find_element_by_name("user").send_keys("%s" % username)
+        driver.find_element_by_id("LoginForm").click()
+        driver.find_element_by_name("pass").click()
+        driver.find_element_by_name("pass").clear()
+        driver.find_element_by_name("pass").send_keys("%s" % password)
+        driver.find_element_by_xpath("//input[@value='Login']").click()
+
+    def open_home_page(self, driver):
+        # open home page
+        driver.get("http://localhost/addressbook/index.php")
+
     
     def tearDown(self):
         self.driver.quit()
-        self.assertEqual([], self.verificationErrors)
