@@ -32,17 +32,6 @@ class UntitledTestCase1(unittest.TestCase):
         self.return_to_groups_page(driver)
         self.logout(driver)
 
-    # def test_long_value_group(self):
-    #     driver = self.driver
-    #     self.open_home_page(driver)
-    #     self.login("admin", driver)
-    #     self.open_groups_page(driver)
-    #     self.create_group(driver, name="898989898898989898989898989898989898989898989909090909090909090909090909090909090909090909090909090909090909090909090909898", \
-    #                       header="9898989898989090909090990090909090909090909090089898989898989", footer="909090909090909090909090909090909090090909009090909000990909")
-    #
-    #     self.return_to_groups_page(driver)
-    #     self.logout(driver)
-
     def create_group(self, driver, group):
         # init group creation
         driver.find_element_by_name("new").click()
