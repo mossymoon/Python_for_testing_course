@@ -1,72 +1,26 @@
-# Задание №3 создание методов и классов - для контактов
-from selenium import webdriver
-import unittest
+# Задание №4 создание фикстуры с вынесением отдельного класса
+import pytest
 from contact import Contact
+from new_contact_fixture import New_Contact
 
-class TestCaseContact(unittest.TestCase):
-    def setUp(self):
-        self.driver = webdriver.Firefox()
-        self.driver.implicitly_wait(30)
+@pytest.fixture()
+def app(request):
+    fixture = New_Contact()
+    request.addfinalizer(fixture.destroy)
+    return fixture
 
-    def test_case_contact(self):
-        driver = self.driver
-        self.open_home_page(driver)
-        self.login("admin", driver, "secret")
-        self.new_contact(driver)
-        self.create_new_contact(driver, Contact(firstname="Ivan", lastname="Ivanov", address="Moscow", mobile=3232323))
-        self.return_to_homepage(driver)
-        self.logout(driver)
+def test_case_contact(app):
+    app.open_home_page()
+    app.login("admin", "secret")
+    app.new_contact()
+    app.create_new_contact(Contact(firstname="Ivan", lastname="Ivanov", address="Moscow", mobile=3232323))
+    app.return_to_homepage()
+    app.logout()
 
-    def test_empty_case_contact(self):
-        driver = self.driver
-        self.login("admin", driver, "secret")
-        self.create_new_contact(driver, Contact(firstname="", lastname="", address="", mobile=""))
-        self.logout(driver)
+def test_empty_case_contact(app):
+    app.login("admin", "secret")
+    app.create_new_contact(Contact(firstname="", lastname="", address="", mobile=""))
+    app.logout()
 
-    def logout(self, driver):
-        driver.find_element_by_link_text("Logout").click()
-
-    def return_to_homepage(self, driver):
-        driver.find_element_by_link_text("home").click()
-
-    def create_new_contact(self, driver, contact):
-        self.new_contact(driver)
-        driver.find_element_by_name("firstname").click()
-        driver.find_element_by_name("firstname").clear()
-        driver.find_element_by_name("firstname").send_keys(contact.firstname)
-        driver.find_element_by_name("lastname").click()
-        driver.find_element_by_name("lastname").clear()
-        driver.find_element_by_name("lastname").send_keys(contact.lastname)
-        driver.find_element_by_name("address").click()
-        driver.find_element_by_name("address").clear()
-        driver.find_element_by_name("address").send_keys(contact.address)
-        driver.find_element_by_name("mobile").click()
-        driver.find_element_by_name("mobile").clear()
-        driver.find_element_by_name("mobile").send_keys(contact.mobile)
-        driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
-        # submit new contact
-        driver.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
-        self.return_to_homepage(driver)
-
-    def new_contact(self, driver):
-        driver.find_element_by_link_text("add new").click()
-
-    def login(self, username, driver, password):
-        self.open_home_page(driver)
-        driver.find_element_by_name("user").click()
-        driver.find_element_by_name("user").clear()
-        driver.find_element_by_name("user").send_keys(username)
-        driver.find_element_by_name("pass").click()
-        driver.find_element_by_name("pass").clear()
-        driver.find_element_by_name("pass").send_keys(password)
-        driver.find_element_by_xpath("//input[@value='Login']").click()
-
-    def open_home_page(self, driver):
-        # open hame page
-        driver.get("http://localhost/addressbook/index.php")
-
-    def tearDown(self):
-        self.driver.quit()
-
-if __name__ == "__main__":
-    unittest.main()
+def tearDown(self):
+    self.app.destroy()
