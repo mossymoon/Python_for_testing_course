@@ -24,3 +24,4 @@ def test_empty_case_contact(app):
 
 def tearDown(self):
     self.app.destroy()
+
