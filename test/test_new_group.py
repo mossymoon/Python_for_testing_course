@@ -1,8 +1,8 @@
 # тест из задания №1 (1 урок): с добавленными методами и классами
 
 import pytest
-from group import Group
-from application import Application
+from model.group import Group
+from fixture.application import Application
 
 @pytest.fixture()
 def app(request):

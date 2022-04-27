@@ -1,7 +1,7 @@
 # Задание №4 создание фикстуры с вынесением отдельного класса
 import pytest
-from contact import Contact
-from new_contact_fixture import New_Contact
+from model.contact import Contact
+from fixture.new_contact import New_Contact
 
 @pytest.fixture()
 def app(request):
