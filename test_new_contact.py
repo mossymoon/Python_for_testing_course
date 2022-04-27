@@ -19,11 +19,8 @@ class TestCaseContact(unittest.TestCase):
 
     def test_empty_case_contact(self):
         driver = self.driver
-        self.open_home_page(driver)
         self.login("admin", driver, "secret")
-        self.new_contact(driver)
         self.create_new_contact(driver, Contact(firstname="", lastname="", address="", mobile=""))
-        self.return_to_homepage(driver)
         self.logout(driver)
 
     def logout(self, driver):
@@ -33,6 +30,7 @@ class TestCaseContact(unittest.TestCase):
         driver.find_element_by_link_text("home").click()
 
     def create_new_contact(self, driver, contact):
+        self.new_contact(driver)
         driver.find_element_by_name("firstname").click()
         driver.find_element_by_name("firstname").clear()
         driver.find_element_by_name("firstname").send_keys(contact.firstname)
@@ -48,11 +46,13 @@ class TestCaseContact(unittest.TestCase):
         driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
         # submit new contact
         driver.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+        self.return_to_homepage(driver)
 
     def new_contact(self, driver):
         driver.find_element_by_link_text("add new").click()
 
     def login(self, username, driver, password):
+        self.open_home_page(driver)
         driver.find_element_by_name("user").click()
         driver.find_element_by_name("user").clear()
         driver.find_element_by_name("user").send_keys(username)
