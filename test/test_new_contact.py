@@ -1,13 +1,6 @@
-# Задание №4 создание фикстуры с вынесением отдельного класса
-import pytest
-from model.contact import Contact
-from fixture.application_contact import Contact_Else
+# Задание №5 двухуровневая архитектура теста
 
-@pytest.fixture()
-def app(request):
-    fixture = Contact_Else()
-    request.addfinalizer(fixture.destroy)
-    return fixture
+from model.contact import Contact
 
 def test_case_contact(app):
     app.open_home_page()

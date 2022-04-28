@@ -24,7 +24,7 @@ class ContactHelper:
         driver.find_element_by_name("mobile").send_keys(contact.mobile)
         driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
         driver.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
-        # self.app.return_to_homepage()
+        #self.app.return_to_homepage()
 
     def return_to_homepage(self):
         driver = self.app.driver
