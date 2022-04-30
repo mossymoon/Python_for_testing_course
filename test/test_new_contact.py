@@ -12,4 +12,3 @@ def test_empty_case_contact(app):
     app.session.login("admin", "secret")
     app.contact.create_new_contact(Contact(firstname="", lastname="", address="", mobile=""))
     app.session.logout()
-
