@@ -9,7 +9,7 @@ class ContactHelper:
 
     def create_new_contact(self, contact):
         driver = self.app.driver
-        self.app.new_contact()
+        self.new_contact()
         driver.find_element_by_name("firstname").click()
         driver.find_element_by_name("firstname").clear()
         driver.find_element_by_name("firstname").send_keys(contact.firstname)
@@ -24,8 +24,9 @@ class ContactHelper:
         driver.find_element_by_name("mobile").send_keys(contact.mobile)
         driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
         driver.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
-        #self.app.return_to_homepage()
+        # self.app.return_to_homepage()
 
     def return_to_homepage(self):
         driver = self.app.driver
         driver.find_element_by_link_text("home").click()
+
