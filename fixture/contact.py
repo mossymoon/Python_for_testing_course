@@ -52,7 +52,10 @@ class ContactHelper:
     def test_edit_first_contact(self):
         driver = self.app.driver
         self.app.open_home_page()
-        # driver.find_element_by_link_text("home").click()
+        self.edit_first_contact()
+
+    def edit_first_contact(self):
+        driver = self.app.driver
         driver.find_element_by_xpath("//img[@alt='Edit']").click()
         driver.find_element_by_name("firstname").click()
         driver.find_element_by_name("firstname").clear()
@@ -68,10 +71,6 @@ class ContactHelper:
         driver.find_element_by_name("email").send_keys("fdfdf")
         driver.find_element_by_xpath("//form[@action='edit.php']").click()
         driver.find_element_by_xpath("//div[@id='content']/form/input[22]").click()
-        # driver.find_element_by_link_text("home page").click()
-        # driver.find_element_by_link_text("Logout").click()
-        # driver.find_element_by_name("user").clear()
-        # driver.find_element_by_name("user").send_keys("admin")
 
     def return_to_homepage(self):
         driver = self.app.driver
