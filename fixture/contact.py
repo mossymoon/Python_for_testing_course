@@ -25,14 +25,11 @@ class ContactHelper:
         driver.find_element_by_name("mobile").send_keys(contact.mobile)
         driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
         driver.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
-        # self.app.return_to_homepage()
 
     def delete_first_group(self):
         driver = self.app.driver
         self.app.open_groups_page()
-        # select first group
         driver.find_element_by_name("selected[]").click()
-        # submit deletion
         driver.find_element_by_name("delete").click()
         driver.find_element_by_link_text("group page").click()
 
