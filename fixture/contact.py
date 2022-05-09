@@ -8,30 +8,13 @@ class ContactHelper:
         driver = self.app.driver
         driver.find_element_by_link_text("add new").click()
 
-    def create_new_contact(self, contact):
+    def create_new_contact(self, new_contact_data):
         driver = self.app.driver
+        self.app.open_home_page()
         self.new_contact()
-        driver.find_element_by_name("firstname").click()
-        driver.find_element_by_name("firstname").clear()
-        driver.find_element_by_name("firstname").send_keys(contact.firstname)
-        driver.find_element_by_name("lastname").click()
-        driver.find_element_by_name("lastname").clear()
-        driver.find_element_by_name("lastname").send_keys(contact.lastname)
-        driver.find_element_by_name("address").click()
-        driver.find_element_by_name("address").clear()
-        driver.find_element_by_name("address").send_keys(contact.address)
-        driver.find_element_by_name("mobile").click()
-        driver.find_element_by_name("mobile").clear()
-        driver.find_element_by_name("mobile").send_keys(contact.mobile)
-        driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+        self.fill_contact_form(new_contact_data)
         driver.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
-
-    def delete_first_group(self):
-        driver = self.app.driver
-        self.app.open_groups_page()
-        driver.find_element_by_name("selected[]").click()
-        driver.find_element_by_name("delete").click()
-        driver.find_element_by_link_text("group page").click()
+        self.return_to_homepage()
 
     def delete_first_contact(self):
         driver = self.app.driver
@@ -46,28 +29,50 @@ class ContactHelper:
         time.sleep(2)
         driver.find_element_by_link_text("home").click()
 
-    def test_edit_first_contact(self):
+    def test_edit_first_contact(self, contact):
         driver = self.app.driver
         self.app.open_home_page()
-        self.edit_first_contact()
+        self.edit_first_contact(contact)
+        self.return_to_homepage()
 
-    def edit_first_contact(self):
+    def edit_first_contact(self, contact):
+        driver = self.app.driver
+        self.select_first_contact()
+        driver.find_element_by_xpath("//form[@action='edit.php']").click()
+        self.fill_contact_form(contact)
+        driver.find_element_by_xpath("//div[@id='content']/form/input[22]").click()
+
+    def fill_contact_form(self, contact):
+        self.change_field_value("firstname", contact.firstname)
+        self.change_field_value("lastname", contact.lastname)
+        self.change_field_value("address", contact.address)
+        self.change_field_value("mobile", contact.mobile)
+
+    def change_field_value(self, field_name, text):
+        driver = self.app.driver
+        if text is not None:
+            driver.find_element_by_name(field_name).click()
+            driver.find_element_by_name(field_name).clear()
+            driver.find_element_by_name(field_name).send_keys(text)
+
+    def select_first_contact(self):
         driver = self.app.driver
         driver.find_element_by_xpath("//img[@alt='Edit']").click()
-        driver.find_element_by_name("firstname").click()
-        driver.find_element_by_name("firstname").clear()
-        driver.find_element_by_name("firstname").send_keys("rdfd")
-        driver.find_element_by_name("lastname").click()
-        driver.find_element_by_name("lastname").clear()
-        driver.find_element_by_name("lastname").send_keys("fdfdf")
-        driver.find_element_by_name("home").click()
-        driver.find_element_by_name("home").clear()
-        driver.find_element_by_name("home").send_keys("fdfdf")
-        driver.find_element_by_name("email").click()
-        driver.find_element_by_name("email").clear()
-        driver.find_element_by_name("email").send_keys("fdfdf")
+
+    def modify_first_contact(self, new_contact_data):
+        driver = self.app.driver
+        self.app.open_home_page()
+        self.select_first_contact()
+        driver.find_element_by_xpath("//form[@action='edit.php']").click()
+        self.fill_contact_form(new_contact_data)
         driver.find_element_by_xpath("//form[@action='edit.php']").click()
         driver.find_element_by_xpath("//div[@id='content']/form/input[22]").click()
+        self.return_to_homepage()
+
+    def count(self):
+        driver = self.app.driver
+        self.app.open_home_page()
+        return len(driver.find_elements_by_name("selected[]"))
 
     def return_to_homepage(self):
         driver = self.app.driver

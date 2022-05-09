@@ -38,22 +38,24 @@ class GroupHelper:
         driver.find_element_by_name("delete").click()
         driver.find_element_by_link_text("group page").click()
 
-    def test_edit_first_group(self):
+    def test_edit_first_group(self, new_group_data):
         driver = self.app.driver
         self.open_groups_page()
         self.select_first_group()
         driver.find_element_by_name("edit").click()
-        driver.find_element_by_name("group_name").click()
-        driver.find_element_by_name("group_name").clear()
-        driver.find_element_by_name("group_name").send_keys("gfgf")
-        driver.find_element_by_name("group_header").click()
-        driver.find_element_by_name("group_header").clear()
-        driver.find_element_by_name("group_header").send_keys("gfgf")
-        driver.find_element_by_name("group_footer").click()
-        driver.find_element_by_name("group_footer").clear()
-        driver.find_element_by_name("group_footer").send_keys("gfgfg")
+        self.fill_group_form(new_group_data)
+        # driver.find_element_by_name("group_name").click()
+        # driver.find_element_by_name("group_name").clear()
+        # driver.find_element_by_name("group_name").send_keys("gfgf")
+        # driver.find_element_by_name("group_header").click()
+        # driver.find_element_by_name("group_header").clear()
+        # driver.find_element_by_name("group_header").send_keys("gfgf")
+        # driver.find_element_by_name("group_footer").click()
+        # driver.find_element_by_name("group_footer").clear()
+        # driver.find_element_by_name("group_footer").send_keys("gfgfg")
         driver.find_element_by_name("update").click()
-        driver.find_element_by_link_text("group page").click()
+        self.return_to_groups_page()
+        # driver.find_element_by_link_text("group page").click()
 
     def select_first_group(self):
         driver = self.app.driver
