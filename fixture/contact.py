@@ -1,4 +1,6 @@
 import time
+from model.contact import Contact
+
 class ContactHelper:
 
     def __init__(self, app):
@@ -77,4 +79,14 @@ class ContactHelper:
     def return_to_homepage(self):
         driver = self.app.driver
         driver.find_element_by_link_text("home").click()
+
+    def get_contact_list(self):
+        driver = self.app.driver
+        self.app.open_home_page()
+        contacts = []
+        for element in driver.find_elements_by_css_selector("td.center"):
+            text = element.text
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            contacts.append(Contact(firstname=text, lastname=text, id=id))
+        return contacts
 

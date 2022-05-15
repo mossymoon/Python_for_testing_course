@@ -1,3 +1,5 @@
+from model.group import Group
+
 class GroupHelper:
 
     def __init__(self, app):
@@ -45,18 +47,8 @@ class GroupHelper:
         self.select_first_group()
         driver.find_element_by_name("edit").click()
         self.fill_group_form(new_group_data)
-        # driver.find_element_by_name("group_name").click()
-        # driver.find_element_by_name("group_name").clear()
-        # driver.find_element_by_name("group_name").send_keys("gfgf")
-        # driver.find_element_by_name("group_header").click()
-        # driver.find_element_by_name("group_header").clear()
-        # driver.find_element_by_name("group_header").send_keys("gfgf")
-        # driver.find_element_by_name("group_footer").click()
-        # driver.find_element_by_name("group_footer").clear()
-        # driver.find_element_by_name("group_footer").send_keys("gfgfg")
         driver.find_element_by_name("update").click()
         self.return_to_groups_page()
-        # driver.find_element_by_link_text("group page").click()
 
     def select_first_group(self):
         driver = self.app.driver
@@ -83,4 +75,14 @@ class GroupHelper:
         driver = self.app.driver
         self.open_groups_page()
         return len(driver.find_elements_by_name("selected[]"))
+
+    def get_group_list(self):
+        driver = self.app.driver
+        self.open_groups_page()
+        groups = []
+        for element in driver.find_elements_by_css_selector("span.group"):
+            text = element.text
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            groups.append(Group(name=text, id=id))
+        return groups
 
