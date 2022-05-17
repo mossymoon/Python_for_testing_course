@@ -84,7 +84,7 @@ class ContactHelper:
         driver = self.app.driver
         self.app.open_home_page()
         contacts = []
-        for element in driver.find_elements_by_css_selector("td.center"):
+        for element in driver.find_elements_by_css_selector("tr.odd:nth-child(3)"):
             text = element.text
             id = element.find_element_by_name("selected[]").get_attribute("value")
             contacts.append(Contact(firstname=text, lastname=text, id=id))

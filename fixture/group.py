@@ -13,10 +13,8 @@ class GroupHelper:
     def create(self, group):
         driver = self.app.driver
         self.open_groups_page()
-        # init group creation
         driver.find_element_by_name("new").click()
         self.fill_group_form(group)
-        # submit group creation
         driver.find_element_by_name("submit").click()
 
     def fill_group_form(self, group):
