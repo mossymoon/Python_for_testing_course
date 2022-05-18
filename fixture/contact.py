@@ -16,7 +16,6 @@ class ContactHelper:
         self.new_contact()
         self.fill_contact_form(new_contact_data)
         driver.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
-        time.sleep(3)
         self.return_to_homepage()
 
     def delete_first_contact(self):
