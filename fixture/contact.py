@@ -16,6 +16,7 @@ class ContactHelper:
         self.new_contact()
         self.fill_contact_form(new_contact_data)
         driver.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+        time.sleep(3)
         self.return_to_homepage()
 
     def delete_first_contact(self):
@@ -84,7 +85,7 @@ class ContactHelper:
         driver = self.app.driver
         self.app.open_home_page()
         contacts = []
-        for element in driver.find_elements_by_css_selector("tr.odd:nth-child(3)"):
+        for element in driver.find_elements_by_xpath("//tr[@class='']"):
             text = element.text
             id = element.find_element_by_name("selected[]").get_attribute("value")
             contacts.append(Contact(firstname=text, lastname=text, id=id))
