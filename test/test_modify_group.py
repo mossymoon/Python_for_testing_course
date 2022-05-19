@@ -1,6 +1,8 @@
 from model.group import Group
 
 def test_modify_group(app):
+    if app.group.count() == 0:
+        app.group.create(Group(name="test22"))
     old_groups = app.group.get_group_list()
     group = Group(name="New group")
     group.id = old_groups[0].id
