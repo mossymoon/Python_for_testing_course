@@ -16,6 +16,7 @@ class GroupHelper:
         driver.find_element_by_name("new").click()
         self.fill_group_form(group)
         driver.find_element_by_name("submit").click()
+        self.group_cache = None
 
     def fill_group_form(self, group):
         driver = self.app.driver
@@ -33,11 +34,10 @@ class GroupHelper:
     def delete_first_group(self):
         driver = self.app.driver
         self.open_groups_page()
-        # select first group
         self.select_first_group()
-        # submit deletion
         driver.find_element_by_name("delete").click()
         driver.find_element_by_link_text("group page").click()
+        self.group_cache = None
 
     def test_edit_first_group(self, new_group_data):
         driver = self.app.driver
@@ -56,13 +56,11 @@ class GroupHelper:
         driver = self.app.driver
         self.open_groups_page()
         self.select_first_group()
-        # open modification form
         driver.find_element_by_name("edit").click()
-        # fill group form
         self.fill_group_form(new_group_data)
-        # submit modification
         driver.find_element_by_name("update").click()
         self.return_to_groups_page()
+        self.group_cache = None
 
 
     def return_to_groups_page(self):
@@ -74,13 +72,17 @@ class GroupHelper:
         self.open_groups_page()
         return len(driver.find_elements_by_name("selected[]"))
 
+    group_cache = None
+
     def get_group_list(self):
-        driver = self.app.driver
-        self.open_groups_page()
-        groups = []
-        for element in driver.find_elements_by_css_selector("span.group"):
-            text = element.text
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            groups.append(Group(name=text, id=id))
-        return groups
+        if self.group_cache is None:
+            driver = self.app.driver
+            self.open_groups_page()
+            self.group_cache = []
+            for element in driver.find_elements_by_css_selector("span.group"):
+                text = element.text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                self.group_cache.append(Group(name=text, id=id))
+
+        return list(self.group_cache)
 
