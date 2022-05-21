@@ -40,14 +40,14 @@ class ContactHelper:
         driver = self.app.driver
         driver.find_elements_by_name("selected[]")[index].click()
 
-    def edit_first_contact(self, contact):
-        driver = self.app.driver
-        self.return_to_homepage()
-        self.select_first_contact()
-        driver.find_element_by_xpath("//form[@action='edit.php']").click()
-        self.fill_contact_form(contact)
-        driver.find_element_by_xpath("//div[@id='content']/form/input[22]").click()
-        self.return_to_homepage()
+    # def edit_first_contact(self, contact):
+    #     driver = self.app.driver
+    #     self.return_to_homepage()
+    #     self.select_first_contact()
+    #     driver.find_element_by_xpath("//form[@action='edit.php']").click()
+    #     self.fill_contact_form(contact)
+    #     driver.find_element_by_xpath("//div[@id='content']/form/input[22]").click()
+    #     self.return_to_homepage()
 
     def fill_contact_form(self, contact):
         self.change_field_value("firstname", contact.firstname)
