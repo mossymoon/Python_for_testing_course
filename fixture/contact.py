@@ -18,7 +18,7 @@ class ContactHelper:
         self.new_contact()
         self.fill_contact_form(new_contact_data)
         driver.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
-        self.contact_cashe = None
+        self.contact_cache = None
 
     def delete_contact_by_index(self, index):
         driver = self.app.driver
@@ -32,7 +32,7 @@ class ContactHelper:
         alert.accept()
         # time.sleep(2)
         driver.find_element_by_link_text("home").click()
-        self.contact_cashe = None
+        self.contact_cache = None
 
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
@@ -70,7 +70,7 @@ class ContactHelper:
         driver.find_element_by_xpath("//form[@action='edit.php']").click()
         driver.find_element_by_xpath("//div[@id='content']/form/input[22]").click()
         self.return_to_homepage()
-        self.contact_cashe = None
+        self.contact_cache = None
 
     def modify_first_contact(self):
         self.modify_contact_by_index(0)
@@ -84,33 +84,49 @@ class ContactHelper:
         driver = self.app.driver
         driver.find_element_by_link_text("home").click()
 
-    contact_cashe = None
+    contact_cache = None
 
     def get_contact_list(self):
-        if self.contact_cashe is None:
+        if self.contact_cache is None:
             driver = self.app.driver
             self.app.open_home_page()
-            self.contact_cashe = []
-            for row in driver.find_elements_by_xpath("//tr[position() >1]"):
+            self.contact_cache = []
+            for row in driver.find_elements_by_name("entry"):
                 cells = row.find_elements_by_tag_name("td")
                 firstname = cells[1].text
                 lastname = cells[2].text
-                id = cells[0].find_element_by_name("input").get_attribute("value")
-                all_phones = cells[5].splitlines()
-                self.contact_cashe.append(Contact(firstname=firstname, lastname=lastname, id=id,
+                address = cells[3].text
+                id = cells[0].find_element_by_tag_name("input").get_attribute("value")
+                all_phones = cells[5].text.splitlines()
+                self.contact_cache.append(Contact(firstname=firstname, lastname=lastname, address=address, id=id,
                                                   homephone=all_phones[0], mobile=all_phones[1],
-                                                workphone=all_phones[2], secondaryphone=all_phones[3]))
-        return list(self.contact_cashe)
+                                                  workphone=all_phones[2], secondaryphone=all_phones[3]))
+        return list(self.contact_cache)
+
+    def open_contact_to_edit_by_index(self, index):
+        driver = self.app.driver
+        self.app.open_home_page()
+        row = driver.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name["a"].click()
+
+    def open_contact_view_by_index(self, index):
+        driver = self.app.driver
+        self.app.open_home_page()
+        row = driver.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[6]
+        cell.find_element_by_tag_name("a").click()
 
     def get_contact_info_from_edit_page(self, index):
         driver = self.app.driver
         self.select_contact_by_index(index)
         firstname = driver.find_elements_by_name("firstname").get_atribute("value")
         lastname = driver.find_elements_by_name("lastname").get_atribute("value")
+        address = driver.find_elements_by_name("address").get_atribute("value")
         id = driver.find_elements_by_name("id").get_atribute("value")
         homephone = driver.find_elements_by_name("home").get_atribute("value")
-        workphone = driver.find_elements_by_name("work").get_atribute("value")
         mobile = driver.find_elements_by_name("mobile").get_atribute("value")
+        workphone = driver.find_elements_by_name("work").get_atribute("value")
         secondaryphone = driver.find_elements_by_name("phone2").get_atribute("value")
         return Contact(firstname=firstname, lastname=lastname, id=id,
                        homephone=homephone, workphone=workphone, mobile=mobile,
