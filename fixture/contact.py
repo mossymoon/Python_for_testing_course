@@ -19,7 +19,7 @@ class ContactHelper:
         self.new_contact()
         self.fill_contact_form(new_contact_data)
         driver.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
-        # self.return_to_homepage()
+        self.return_to_homepage()
         self.contact_cache = None
 
     def delete_contact_by_index(self, index):
