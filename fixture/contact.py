@@ -95,8 +95,8 @@ class ContactHelper:
             self.contact_cache = []
             for row in driver.find_elements_by_name("entry"):
                 cells = row.find_elements_by_tag_name("td")
-                firstname = cells[1].text
-                lastname = cells[2].text
+                firstname = cells[2].text
+                lastname = cells[1].text
                 address = cells[3].text
                 id = cells[0].find_element_by_tag_name("input").get_attribute("value")
                 all_phones = cells[5].text.splitlines()
@@ -121,7 +121,7 @@ class ContactHelper:
 
     def get_contact_info_from_edit_page(self, index):
         driver = self.app.driver
-        self.select_contact_by_index(index)
+        self.open_contact_to_edit_by_index(index)
         firstname = driver.find_elements_by_name("firstname").get_atribute("value")
         lastname = driver.find_elements_by_name("lastname").get_atribute("value")
         address = driver.find_elements_by_name("address").get_atribute("value")
