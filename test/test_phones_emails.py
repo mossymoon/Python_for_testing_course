@@ -24,10 +24,7 @@ def merge_phones_like_on_home_page(contact):
                                                                  contact.mobilephone, contact.secondaryphone]))))
 
 def merge_emails_like_on_home_page(contact):
-    return "\n".join(filter(lambda x: x != "",
-                            map(lambda x: clear(x),
-                                filter(lambda x: x is not None,
-                                       [contact.e_mail, contact.e_mail2, contact.e_mail3]))))
+    return "\n".join(filter(lambda x: x != "", [contact.e_mail, contact.e_mail2, contact.e_mail3]))
 
 def test_random_contact(app):
     old_contacts = app.contact.get_contact_list()
@@ -37,3 +34,4 @@ def test_random_contact(app):
     assert contact_from_edit_page == contact_from_home_page
     assert contact_from_home_page.all_phones_from_home_page == merge_phones_like_on_home_page(contact_from_edit_page)
     assert contact_from_home_page.all_emails_from_home_page == merge_emails_like_on_home_page(contact_from_edit_page)
+    assert contact_from_home_page.address == contact_from_edit_page.address
